@@ -1,0 +1,5 @@
+.venv/
+.vene-linux/
+__pycache__/
+*.pyc
+.git/
