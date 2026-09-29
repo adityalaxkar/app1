@@ -2,12 +2,15 @@ name: Flask DevOps App CI
 
 on:
   push:
-    branches:
-      - main
 
   pull_request:
     branches:
       - main
+
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   test-and-build:
@@ -32,8 +35,20 @@ jobs:
         run: |
           python -c "from app import app; print('Flask application imported successfully')"
 
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker Image
         run: |
-          docker build -t flask-devops-app:${{ github.sha }} .
+          docker build \
+          -t ghcr.io/${{ github.repository_owner }}/flask-devops-app:${{ github.sha }} \
+          .
 
+      - name: Push Docker Images
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/flask-devops-app:${{ github.sha }}
 
