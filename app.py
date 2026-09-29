@@ -12,7 +12,7 @@ def pratik_home():
 
 @app.route("/health")
 def health():
-    return "Application is healthy - version 2\n" \
+    return "Application is healthy - version 3\n" \
     
 
 @app.route("/info")
